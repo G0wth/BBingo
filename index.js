@@ -10,6 +10,7 @@
 var totalPlayers = [];
 var sorted_numbers = [];
 var gameProgress = false;
+var gameEnded = false;
 
 // função para detrtminar a geração de números aleatórios
 function generateRandomNumbers(amount, min, max) {
@@ -49,22 +50,27 @@ function generateCard() {
 
 // função para gerar a cartela do jogador
 function insertPlayer() {
-  const playerName = prompt('Digite o nome do jogador.');
+  if (gameProgress == true) {
+    alert("Não é possível criar uma cartela com o jogo em andamento!");
+    return;
+  }
+
+  if (gameEnded) {
+    alert("Não é possível criar uma cartela pois a partida já terminou, pressione o botão Resetar para poder jogar novamente.");
+    return;
+  }
+
+  const playerName = prompt('Digite o nome do jogador:');
 
   if (playerName.length < 1) {
-    alert('Escreva um nome com pelo menos 1 caractere');
+    alert('Escreva um nome com pelo menos 1 caractere.');
     return;
   }
 
   const isNameExists = totalPlayers.some(player => player.name === playerName);
 
   if (isNameExists) {
-    alert('Esse nome já existe. Escolha um nome diferente.');
-    return;
-  }
-
-  if (gameProgress == true) {
-    alert("Não é possível criar uma cartela com o jogo em andamento!");
+    alert('Esse nome já existe! Escolha um nome diferente.');
     return;
   }
 
@@ -140,6 +146,16 @@ function drawCard(player) {
 
 // função para iniciar o jogo
 function startGame() {
+  if (gameEnded) {
+    alert("A partida já terminou, pressione o botão Resetar para poder jogar novamente.");
+    return;
+  }
+
+  if (gameProgress) {
+    alert("O jogo já está em andamento!");
+    return;
+  }
+
   if (totalPlayers.length < 2) {
     alert("Você precisa ter pelo menos dois jogadores para iniciar o jogo!");
     return;
@@ -206,6 +222,7 @@ function startGame() {
 // Função para tratar o final do jogo
 function handleGameEnd(drawnNumbers, winners = []) {
   gameProgress = false;
+  gameEnded = true;
 
   if (winners.length === 0) {
     alert("Todos os números foram sorteados! O jogo acabou.");
@@ -231,7 +248,7 @@ function handleGameEnd(drawnNumbers, winners = []) {
     winnersText = winnersText.slice(0, -2);
     setTimeout(() => {
       alert(`Empate! Os jogadores ${winnersText} empataram!`);
-    }, 100); 
+    }, 100);
   }
 
   clearInterval(intervalId);
