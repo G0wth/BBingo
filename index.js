@@ -32,6 +32,7 @@ function generateRandomNumbers(amount, min, max) {
   return number;
 }
 
+
 // função para adicionar os valores gerados em cada coluna da cartela do bingo
 function generateCard() {
   var card = [
@@ -137,8 +138,6 @@ function drawCard(player) {
 
 }
 
-
-// função para iniciar o jogo
 // função para iniciar o jogo
 function startGame() {
   if (totalPlayers.length < 2) {
@@ -153,7 +152,7 @@ function startGame() {
   const intervalId = setInterval(() => {
     if (drawnNumbers.length === 75) {
       clearInterval(intervalId);
-      alert("Todos os números foram sorteados! O jogo acabou.");
+      handleGameEnd(drawnNumbers);
       return;
     }
 
@@ -169,27 +168,21 @@ function startGame() {
     div_space_game.appendChild(div_number);
 
     // Verificar se alguma tabela está completa para cada jogador
+    const winners = [];
     for (let i = 0; i < totalPlayers.length; i++) {
       const player = totalPlayers[i];
       const card = player.card;
 
       // Verificar se a tabela do jogador está completa
       if (isTableComplete(card, drawnNumbers)) {
-        clearInterval(intervalId);
-        setTimeout(() => {
-          const tdList = document.querySelectorAll('.card:nth-child(' + (i + 1) + ') .tddefault');
-          for (const td of tdList) {
-            const number = parseInt(td.innerText);
-            if (drawnNumbers.includes(number)) {
-              td.className = 'tdsorted';
-            }
+        winners.push(player);
+        const tdList = document.querySelectorAll('.card:nth-child(' + (i + 1) + ') .tddefault');
+        for (const td of tdList) {
+          const number = parseInt(td.innerText);
+          if (drawnNumbers.includes(number)) {
+            td.className = 'tdsorted';
           }
-          setTimeout(() => {
-            alert(`Bingo! O jogador ${player.name} ganhou!`);
-            gameProgress = false;
-          }, 100); // Atraso de 100ms antes de exibir a mensagem
-        }, 100); // Atraso de 100ms antes de atualizar a classe do último número
-        return;
+        }
       }
 
       // Verificar se algum número foi sorteado na tabela do jogador e marcar como sorteado
@@ -202,8 +195,49 @@ function startGame() {
         }
       }
     }
-  }, 200);
+
+    if (winners.length > 0) {
+      clearInterval(intervalId);
+      handleGameEnd(drawnNumbers, winners);
+    }
+  }, 100);
 }
+
+// Função para tratar o final do jogo
+function handleGameEnd(drawnNumbers, winners = []) {
+  gameProgress = false;
+
+  if (winners.length === 0) {
+    alert("Todos os números foram sorteados! O jogo acabou.");
+    return;
+  }
+
+  if (winners.length === 1) {
+    const winner = winners[0];
+    setTimeout(() => {
+      alert(`Bingo! O jogador ${winner.name} ganhou!`);
+    }, 100);
+  } else {
+    let winnersText = '';
+    for (const winner of winners) {
+      winnersText += winner.name + ', ';
+      const tdList = document.querySelectorAll('.card');
+      for (const td of tdList) {
+        if (td.innerText === winner.name) {
+          td.style.backgroundColor = 'yellow';
+        }
+      }
+    }
+    winnersText = winnersText.slice(0, -2);
+    setTimeout(() => {
+      alert(`Empate! Os jogadores ${winnersText} empataram!`);
+    }, 100); 
+  }
+
+  clearInterval(intervalId);
+}
+
+
 
 
 // Função auxiliar para verificar se uma tabela está completa
@@ -220,13 +254,11 @@ function isTableComplete(card, drawnNumbers) {
       }
     }
 
-    // Se uma linha não estiver completa, a tabela não está completa
     if (!lineComplete) {
       return false;
     }
   }
 
-  // Todas as linhas estão completas
   return true;
 }
 
