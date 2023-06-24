@@ -50,39 +50,51 @@ function generateRandomNumbers(amount, min, max){
     return number;
 }
 
-function generateCard(){
+function generateCard() {
     var playerName = prompt('Digite o nome do jogador.') || '';
-
+  
     if (playerName.trim().length === 0) {
-    alert('Escreva um nome com pelo menos 1 dígito');
-    return;
+      alert('Escreva um nome com pelo menos 1 dígito');
+      return;
     }
-
-    if(gameProgress == true){
-        alert("Não é possível criar uma cartela com o jogo em andamaento!");
-        return;
+  
+    if (totalPlayers.some(player => player.name === playerName)) {
+      alert('Esse nome já existe. Escolha um nome diferente.');
+      return;
     }
-
-    var card = [generateRandomNumbers(5,1,15), generateRandomNumbers(5,16,30), generateRandomNumbers(5,31,45), generateRandomNumbers(5,46,60), generateRandomNumbers(5,61,75)];
-
-    while(card.length < 24){
-        var random_number = Math.floor(Math.random()*75 + 1);
-        if(!card.includes(random_number)){
-            card.push(random_number)
-        }
+  
+    if (gameProgress == true) {
+      alert("Não é possível criar uma cartela com o jogo em andamento!");
+      return;
     }
-
+  
+    var card = [
+      generateRandomNumbers(5, 1, 15),
+      generateRandomNumbers(5, 16, 30),
+      generateRandomNumbers(5, 31, 45),
+      generateRandomNumbers(5, 46, 60),
+      generateRandomNumbers(5, 61, 75)
+    ];
+  
+    while (card.length < 25) {
+      var random_number = Math.floor(Math.random() * 75 + 1);
+      if (!card.includes(random_number)) {
+        card.push(random_number);
+      }
+    }
+  
     let player = {
-        name: playerName,
-        card: card
-    }
-
+      name: playerName,
+      card: card
+    };
+  
     totalPlayers.push(player);
     console.log(totalPlayers);
-
-    console.log(card)
+  
+    console.log(card);
     return { playerName, card };
-}
+  }
+  
 
 function drawCard(){
 
@@ -146,24 +158,79 @@ function drawCard(){
 
 }
 
-function startGame(){
-    if(totalPlayers.length < 2){
-        alert("Você precisa ter pelo menos dois jogadores para iniciar o jogo!");
-        return;
+function startGame() {
+    if (totalPlayers.length < 2) {
+      alert("Você precisa ter pelo menos dois jogadores para iniciar o jogo!");
+      return;
     }
-
+  
     gameProgress = true;
-
+  
     const div_space_game = document.getElementById('space_game');
+    const drawnNumbers = [];
+    const intervalIds = [];
+  
+    function checkCardComplete(card) {
+      for (let i = 0; i < card.length; i++) {
+        for (let j = 0; j < card[i].length; j++) {
+          if (card[i][j] !== 'X') {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+  
+    function drawRandomNumber(playerIndex) {
+      if (drawnNumbers.length === 75) {
+        clearInterval(intervalIds[playerIndex]);
+        return;
+      }
+  
+      let random_number;
+  
+      do {
+        random_number = Math.floor(Math.random() * 75 + 1);
+      } while (drawnNumbers.includes(random_number));
+  
+      drawnNumbers.push(random_number);
+  
+      const div_number = document.createElement('div');
+      div_number.className = 'number';
+      div_number.innerText = random_number;
+  
+      div_space_game.appendChild(div_number);
+  
+      // Marcar o número em cada cartela do jogador
+      const player = totalPlayers[playerIndex];
+      const { card } = player;
+  
+      for (let i = 0; i < card.length; i++) {
+        for (let j = 0; j < card[i].length; j++) {
+          if (card[i][j] === random_number) {
+            card[i][j] = 'X';
+          }
+        }
+      }
+  
+      // Verificar se a tabela do jogador está completa
+      if (checkCardComplete(card)) {
+        console.log(`O jogador ${player.name} completou a tabela!`);
+        // Aqui você pode adicionar a lógica para tratar o jogador vencedor como desejar
+      }
+    }
+  
+    totalPlayers.forEach((player, index) => {
+      const intervalId = setInterval(() => drawRandomNumber(index), 1000);
+      intervalIds.push(intervalId);
+    });
+  }
+  
 
-    const div_number = document.createElement('div');
-    div_number.className = 'number';
-
-    div_space_game.appendChild(div_number);
-}
 
 function resetGame(){
     location.reload();
 }
+
 
 
