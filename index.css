@@ -1,0 +1,149 @@
+/* Página */
+
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+/* Cabeçalho */
+
+header{
+    color: aliceblue;
+    width: 100%;
+    height: 20vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: brown;
+}
+
+/* Principal */
+
+main {
+    flex-direction: row;
+    display: flex;
+    min-height: 75vh;
+    width: 100%;
+}
+
+/* Espaço da Cartela */
+
+main section#area_card {
+    width: 70%;
+    flex-grow: 1;
+    background-color: aliceblue;
+}
+
+div#header_card {
+    background-color: rosybrown;
+    justify-content: space-evenly;
+    flex-direction: row;
+    align-items: center;
+    font-size: 24pt;
+    display: flex;
+    height: 16vh;
+    width: 100%;
+}
+
+div#space_card {
+    padding: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+}
+
+/* Cartela */
+div.card {
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    display: flex;
+    margin: 20px;
+}
+div.card h4 {
+    margin-bottom: 6px;
+}
+
+table, td {
+    background-color: beige;
+    border: 2px solid grey;
+}
+th, td {
+    height: 30px;
+    width: 30px;
+    text-align: center;
+}
+/* Jogo */
+
+main section#area_game {
+    width: 30%;
+    flex-grow: 1;
+    background-color: beige;
+}
+
+div#header_game {
+    background-color: burlywood;
+    justify-content: space-evenly;
+    flex-direction: column;
+    align-items: center;
+    font-size: 20pt;
+    display: flex;
+    height: 16vh;
+    width: 100%;
+}
+
+div#space_game {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin: 12px;
+    margin-top: 32px;
+    margin-bottom: 64px;
+}
+
+div.number {
+    margin: 10px;
+    padding: 20px;
+    font-size: 18pt;
+    font-weight: bolder;
+    border-radius: 16px;
+    border: solid 2px darkblue;
+    background-color: lightblue;
+}
+
+
+
+/* Botões */
+
+button {
+    border: none;
+    padding: 6pt;
+    font-size: 14pt;
+    border-radius: 6px;
+    background-color: antiquewhite;
+}
+
+button:hover {
+    background-color: azure;
+    border-radius: 6px;
+    font-size: 14pt;
+    padding: 6pt;
+    border: none;
+    cursor: pointer;
+}
+
+/* Rodapé */
+
+footer{
+    width: 100%;
+    bottom: 0;
+    height: 5vh;
+    display: flex;
+    position: fixed;
+    align-items: center;
+    justify-content: center;
+    background-color: brown;
+}

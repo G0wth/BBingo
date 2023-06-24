@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://img.freepik.com/icones-gratis/de-bilhar_318-803238.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="index.css">
+    <title>Bingo</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>Bingo</h1>
+    </header>
+
+    <main>
+        <section id="area_card">
+            <div id="header_card">
+                <h3>Cartela</h3>
+                <button id="buttonCard" onclick="drawCard()">Gerar Cartela</button>
+                <button onclick="resetGame()">Resetar</button>
+            </div>
+
+            <div id="space_card">
+                
+            </div>
+
+        </section>
+
+        <section id="area_game">
+            <div id="header_game">
+                <h3>Jogo</h3>
+                <button onclick="startGame()">Iniciar</button>
+            </div>
+
+            <div id="space_game">
+                <div class="number">1</div>
+
+            </div>
+            
+        </section>
+    </main>
+
+    <footer>
+        <h4>developed by @vitorburns</h4>
+    </footer>
+
+    <script src="index.js"></script>
+
+</body>
+
+</html>
