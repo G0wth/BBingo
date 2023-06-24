@@ -81,8 +81,6 @@ function insertPlayer() {
 
 // função para construir as cartelas na tela
 function drawCard(player) {
-  generateCard();
-
   const div_space_card = document.getElementById('space_card');
 
   const div_card = document.createElement('div');
@@ -93,17 +91,15 @@ function drawCard(player) {
   const h4_player = document.createElement('h4');
   h4_player.innerText = player.name;
 
-  div_card.appendChild(h4_player)
+  div_card.appendChild(h4_player);
 
   const table_card = document.createElement('table');
   const thead_card = document.createElement('thead');
   const tbody_card = document.createElement('tbody');
 
-
   table_card.appendChild(thead_card);
   table_card.appendChild(tbody_card);
-  div_card.appendChild(table_card)
-
+  div_card.appendChild(table_card);
 
   const th_B = document.createElement('th');
   const th_I = document.createElement('th');
@@ -111,13 +107,11 @@ function drawCard(player) {
   const th_G = document.createElement('th');
   const th_O = document.createElement('th');
 
-
-  th_B.innerText = 'B'
-  th_I.innerText = 'I'
-  th_N.innerText = 'N'
-  th_G.innerText = 'G'
-  th_O.innerText = 'O'
-
+  th_B.innerText = 'B';
+  th_I.innerText = 'I';
+  th_N.innerText = 'N';
+  th_G.innerText = 'G';
+  th_O.innerText = 'O';
 
   thead_card.appendChild(th_B);
   thead_card.appendChild(th_I);
@@ -125,11 +119,17 @@ function drawCard(player) {
   thead_card.appendChild(th_G);
   thead_card.appendChild(th_O);
 
-  for (var n = 0; n < 5; n++) {
+  for (let row = 0; row < 5; row++) {
     const card_tr = document.createElement('tr');
-    for (var a = 0; a < 5; a++) {
+    for (let col = 0; col < 5; col++) {
       const card_td = document.createElement('td');
-      card_td.innerText = player.card[a][n];
+      const number = player.card[col][row];
+      if (row === 2 && col === 2) {
+        card_td.innerText = 'X';
+      } else {
+        card_td.innerText = number;
+      }
+      card_td.className = 'tddefault';
       card_tr.appendChild(card_td);
     }
     tbody_card.appendChild(card_tr);
@@ -137,6 +137,8 @@ function drawCard(player) {
 
 }
 
+
+// função para iniciar o jogo
 // função para iniciar o jogo
 function startGame() {
   if (totalPlayers.length < 2) {
@@ -151,31 +153,86 @@ function startGame() {
   const intervalId = setInterval(() => {
     if (drawnNumbers.length === 75) {
       clearInterval(intervalId);
+      alert("Todos os números foram sorteados! O jogo acabou.");
       return;
     }
 
     let random;
-
     do {
       random = Math.floor(Math.random() * 75 + 1);
     } while (drawnNumbers.includes(random));
 
     drawnNumbers.push(random);
-
     const div_number = document.createElement('div');
     div_number.className = 'number';
     div_number.innerText = random;
-
     div_space_game.appendChild(div_number);
-  }, 1000);
 
+    // Verificar se alguma tabela está completa para cada jogador
+    for (let i = 0; i < totalPlayers.length; i++) {
+      const player = totalPlayers[i];
+      const card = player.card;
+
+      // Verificar se a tabela do jogador está completa
+      if (isTableComplete(card, drawnNumbers)) {
+        clearInterval(intervalId);
+        setTimeout(() => {
+          const tdList = document.querySelectorAll('.card:nth-child(' + (i + 1) + ') .tddefault');
+          for (const td of tdList) {
+            const number = parseInt(td.innerText);
+            if (drawnNumbers.includes(number)) {
+              td.className = 'tdsorted';
+            }
+          }
+          setTimeout(() => {
+            alert(`Bingo! O jogador ${player.name} ganhou!`);
+            gameProgress = false;
+          }, 100); // Atraso de 100ms antes de exibir a mensagem
+        }, 100); // Atraso de 100ms antes de atualizar a classe do último número
+        return;
+      }
+
+      // Verificar se algum número foi sorteado na tabela do jogador e marcar como sorteado
+      const tdList = document.querySelectorAll('.card:nth-child(' + (i + 1) + ') .tddefault');
+      for (const td of tdList) {
+        const number = parseInt(td.innerText);
+        if (drawnNumbers.includes(number)) {
+          td.classList.add('tdsorted');
+          td.classList.remove('tddefault');
+        }
+      }
+    }
+  }, 200);
 }
 
+
+// Função auxiliar para verificar se uma tabela está completa
+function isTableComplete(card, drawnNumbers) {
+  // Verificar linhas
+  for (let i = 0; i < card.length; i++) {
+    let lineComplete = true;
+
+    // Verificar cada número na linha
+    for (let j = 0; j < card[i].length; j++) {
+      if (!drawnNumbers.includes(card[i][j])) {
+        lineComplete = false;
+        break;
+      }
+    }
+
+    // Se uma linha não estiver completa, a tabela não está completa
+    if (!lineComplete) {
+      return false;
+    }
+  }
+
+  // Todas as linhas estão completas
+  return true;
+}
 
 // função para reiniciar o jogo
 function resetGame() {
   location.reload();
 }
-
 
 

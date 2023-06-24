@@ -1,6 +1,6 @@
 /* Página */
 
-*{
+* {
     box-sizing: border-box;
     padding: 0;
     margin: 0;
@@ -8,7 +8,7 @@
 
 /* Cabeçalho */
 
-header{
+header {
     color: aliceblue;
     width: 100%;
     height: 20vh;
@@ -22,8 +22,8 @@ header{
 
 main {
     flex-direction: row;
-    display: flex;
     min-height: 75vh;
+    display: flex;
     width: 100%;
 }
 
@@ -62,19 +62,39 @@ div.card {
     display: flex;
     margin: 20px;
 }
+
 div.card h4 {
+    font-size: 16pt;
     margin-bottom: 6px;
 }
 
-table, td {
+table,
+td {
     background-color: beige;
     border: 2px solid grey;
 }
-th, td {
-    height: 30px;
-    width: 30px;
+
+th,
+td {
+    color: rgb(75, 47, 47);
+    width: 32px;
+    height: 36px;
+    font-size: 14pt;
     text-align: center;
+    font-weight: bold;
+    border-radius: 4px;
 }
+
+.tddefault {
+    background-color: rgb(233, 233, 225);
+}
+
+.tdsorted {
+    background-color: greenyellow;
+    border: solid 2px #8A9D6C;
+    color: #615F2F;
+}
+
 /* Jogo */
 
 main section#area_game {
@@ -95,31 +115,28 @@ div#header_game {
 }
 
 div#space_game {
+    margin: 12px;
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    margin: 12px;
     margin-top: 32px;
+    align-items: center;
     margin-bottom: 64px;
-  }
-  
-  div.number {
+    justify-content: center;
+}
+
+div.number {
+    background-color: lightblue;
+    justify-content: center;
+    border-radius: 16px;
+    align-items: center;
+    font-weight: bolder;
+    font-size: 16pt;
+    display: flex;
+    border: solid 2px darkblue;
     margin: 6px;
     height: 32px;
     width: 64px;
-    font-size: 14pt;
-    font-weight: bolder;
-    border-radius: 16px;
-    border: solid 2px darkblue;
-    background-color: lightblue;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  
-
+}
 
 
 /* Botões */
@@ -143,7 +160,7 @@ button:hover {
 
 /* Rodapé */
 
-footer{
+footer {
     width: 100%;
     bottom: 0;
     height: 5vh;
