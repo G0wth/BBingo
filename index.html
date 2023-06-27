@@ -8,6 +8,7 @@
     <link rel="icon" href="https://img.freepik.com/icones-gratis/de-bilhar_318-803238.jpg" type="image/x-icon">
     <link rel="stylesheet" href="index.css">
     <title>Bingo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 
 <body>
@@ -20,8 +21,8 @@
         <section id="area_card">
             <div id="header_card">
                 <h3>Cartela</h3>
-                <button id="buttonCard" onclick="insertPlayer()">Gerar Cartela</button>
-                <button onclick="resetGame()">Resetar</button>
+                <button class="headbutton" onclick="insertPlayer()">Gerar Cartela</button>
+                <button class="headbutton" onclick="resetGame()">Resetar</button>
             </div>
 
             <div id="space_card">
@@ -33,7 +34,7 @@
         <section id="area_game">
             <div id="header_game">
                 <h3>Jogo</h3>
-                <button onclick="startGame()">Iniciar</button>
+                <button class="headbutton" onclick="startGame()">Iniciar</button>
             </div>
 
             <div id="space_game">
@@ -41,6 +42,17 @@
             </div>
 
         </section>
+
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <button class="close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+                <h1 id="winnerName"></h1>
+                <img id="happycat" src="" alt="Imagem do vencedor">
+            </div>
+        </div>
+
     </main>
 
     <footer>
@@ -48,7 +60,9 @@
     </footer>
 
     <script src="index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-confetti@2.10.1/tsparticles.confetti.bundle.min.js"></script>
 
 </body>
+
 
 </html>

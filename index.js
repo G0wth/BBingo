@@ -49,8 +49,9 @@ function generateCard() {
 }
 
 // função para gerar a cartela do jogador
+// função para inserir um jogador
 function insertPlayer() {
-  if (gameProgress == true) {
+  if (gameProgress) {
     alert("Não é possível criar uma cartela com o jogo em andamento!");
     return;
   }
@@ -62,12 +63,14 @@ function insertPlayer() {
 
   const playerName = prompt('Digite o nome do jogador:');
 
-  if (playerName.length < 1) {
-    alert('Escreva um nome com pelo menos 1 caractere.');
+  if (!playerName || playerName.trim().length === 0) {
+    alert('Digite um nome válido com pelo menos 1 caractere.');
     return;
   }
 
-  const isNameExists = totalPlayers.some(player => player.name === playerName);
+  const formattedName = playerName.trim().replace(/\s+/g, ' ');
+
+  const isNameExists = totalPlayers.some(player => player.name === formattedName);
 
   if (isNameExists) {
     alert('Esse nome já existe! Escolha um nome diferente.');
@@ -77,14 +80,15 @@ function insertPlayer() {
   const card = generateCard();
 
   const player = {
-    name: playerName,
+    name: formattedName,
     card: card
-  }
+  };
 
   totalPlayers.push(player);
   console.log(totalPlayers);
   drawCard(player);
 }
+
 
 // função para construir as cartelas na tela
 function drawCard(player) {
@@ -99,6 +103,7 @@ function drawCard(player) {
   h4_player.innerText = player.name;
 
   div_card.appendChild(h4_player);
+
 
   const table_card = document.createElement('table');
   const thead_card = document.createElement('thead');
@@ -142,6 +147,89 @@ function drawCard(player) {
     tbody_card.appendChild(card_tr);
   }
 
+  // Criar a div .cardbutton
+  const div_cardbutton = document.createElement('div');
+  div_cardbutton.classList.add('cardbutton');
+
+  // Criar o botão de edição
+  const btn_edit = document.createElement('button');
+  btn_edit.id = 'editcard';
+  btn_edit.innerText = '✏️Editar';
+  btn_edit.addEventListener('click', function () {
+    editPlayerName(player, h4_player);
+  });
+  div_cardbutton.appendChild(btn_edit);
+
+  // Criar o botão de exclusão
+  const btn_delete = document.createElement('button');
+  btn_delete.id = 'deletecard';
+  btn_delete.innerText = '❌Apagar';
+  btn_delete.addEventListener('click', function () {
+    deleteCard(div_card, player);
+  });
+  div_cardbutton.appendChild(btn_delete);
+
+  // Adicionar a div .cardbutton à div do cartão (div_card)
+  div_card.appendChild(div_cardbutton);
+
+}
+// função para editar uma tabela:
+
+function editPlayerName(player, h4_player) {
+  if (gameProgress) {
+    alert("Não é possível editar o nome do jogador com o jogo em andamento!");
+    return;
+  }
+
+  if (gameEnded) {
+    alert("Não é possível editar o nome do jogador pois a partida já terminou, pressione o botão Resetar para poder jogar novamente.");
+    return;
+  }
+
+  const newPlayerName = prompt('Digite o novo nome do jogador:', player.name);
+
+  if (!newPlayerName || newPlayerName.trim().length === 0) {
+    alert('Escreva um nome válido com pelo menos 1 caractere.');
+    return;
+  }
+
+  const formattedName = newPlayerName.trim().replace(/\s+/g, ' ');
+
+  const isNameExists = totalPlayers.some((p) => p.name === formattedName && p !== player);
+
+  if (isNameExists) {
+    alert('Esse nome já existe! Escolha um nome diferente.');
+    return;
+  }
+
+  player.name = newPlayerName;
+  h4_player.innerText = newPlayerName;
+}
+
+
+
+
+
+//função para apagar uma tabela:
+
+function deleteCard(cardElement, player) {
+  if (gameProgress) {
+    alert("Não é possível apagar uma cartela com o jogo em andamento!");
+    return;
+  }
+
+  if (gameEnded) {
+    alert("Não é possível apagar uma cartela pois a partida já terminou, pressione o botão Resetar para poder jogar novamente.");
+    return;
+  }
+
+  const index = totalPlayers.indexOf(player);
+  if (index > -1) {
+    totalPlayers.splice(index, 1);
+  }
+
+  cardElement.remove();
+  console.log(totalPlayers);
 }
 
 // função para iniciar o jogo
@@ -232,7 +320,7 @@ function handleGameEnd(drawnNumbers, winners = []) {
   if (winners.length === 1) {
     const winner = winners[0];
     setTimeout(() => {
-      alert(`Bingo! O jogador ${winner.name} ganhou!`);
+      openModal(winner.name);
     }, 100);
   } else {
     let winnersText = '';
@@ -248,13 +336,11 @@ function handleGameEnd(drawnNumbers, winners = []) {
     winnersText = winnersText.slice(0, -2);
     setTimeout(() => {
       alert(`Empate! Os jogadores ${winnersText} empataram!`);
-    }, 100);
+    }, 25);
   }
 
   clearInterval(intervalId);
 }
-
-
 
 
 // Função auxiliar para verificar se uma tabela está completa
@@ -284,4 +370,126 @@ function resetGame() {
   location.reload();
 }
 
+// Abrir a janela de vitória
+function openModal(winnerName) {
+  document.getElementById("myModal").style.display = "block";
+  document.getElementById("winnerName").innerHTML = `Parabéns, o jogador ${winnerName} venceu!`;
+  document.getElementById("happycat").src = "https://media.tenor.com/bWUeVRqW9-IAAAAi/fast-cat-cat-excited.gif";
 
+  startConfetti();
+  playVictoryMusic();
+
+  document.addEventListener("keydown", closeModalEsc);
+}
+
+function closeModal() {
+  document.getElementById("myModal").style.display = "none";
+  stopConfetti();
+  stopMusic();
+}
+function closeModalEsc(event) {
+  if (event.key === "Escape") {
+    closeModal();
+  }
+}
+
+// Cor da scrollbar no Firefox
+if ('scrollbarWidth' in document.documentElement.style) {
+  document.documentElement.style.setProperty('scrollbar-color', 'rosybrown #a52a2a');
+}
+
+
+// música da vitória:
+
+var happysong;
+function playVictoryMusic() {
+  happysong = new Audio("media/happy_happy_happy.mp3");
+  happysong.loop = true;
+  happysong.play();
+}
+
+function stopMusic() {
+  if (happysong) {
+    happysong.pause();
+    happysong.currentTime = 0;
+  }
+}
+
+// confetti:
+
+const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 2 };
+
+function randomInRange(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+function startConfetti() {
+  const duration = 15 * 1000;
+  const animationEnd = Date.now() + duration;
+
+  confettiInterval = setInterval(function () {
+    const timeLeft = animationEnd - Date.now();
+
+    if (timeLeft <= 0) {
+      return clearInterval(confettiInterval);
+    }
+
+    const particleCount = 50 * (timeLeft / duration);
+
+    // since particles fall down, start a bit higher than random
+    confetti(
+      Object.assign({}, defaults, {
+        particleCount,
+        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+      })
+    );
+    confetti(
+      Object.assign({}, defaults, {
+        particleCount,
+        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+      })
+    );
+  }, 512);
+}
+// função para parar os confetti
+function stopConfetti() {
+  clearInterval(confettiInterval);
+}
+
+
+
+
+// atalhos do teclado:
+let modalOpen = false;
+// abrir o balão de vitória
+/*
+document.addEventListener("keydown", function (event) {
+  if (event.key === "w") {
+    if (modalOpen) {
+      closeModal();
+      modalOpen = false;
+    } else {
+      openModal('');
+      modalOpen = true;
+    }
+  }
+});
+*/
+// inserir um jogador
+document.addEventListener("keydown", function (event) {
+  if (event.key === "c") {
+    insertPlayer();
+  }
+});
+// iniciar o jogo
+document.addEventListener("keydown", function (event) {
+  if (event.key === "s") {
+    startGame();
+  }
+});
+// resetar o jogo
+document.addEventListener("keydown", function (event) {
+  if (event.key === "r") {
+    resetGame();
+  }
+});

@@ -1,21 +1,38 @@
 /* Página */
 
 * {
+    scrollbar-width: thin;
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+    /* Largura da scrollbar no Firefox */
 }
+
+/* Scrollbar no Google Chrome */
+::-webkit-scrollbar {
+    width: 8px;
+    background-color: #a52a2a;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rosybrown;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
 
 /* Cabeçalho */
 
 header {
-    color: aliceblue;
-    width: 100%;
-    height: 20vh;
-    display: flex;
-    align-items: center;
+    background-color: #a52a2a;
     justify-content: center;
-    background-color: brown;
+    align-items: center;
+    display: flex;
+    height: 20vh;
+    width: 100%;
+    color: aliceblue;
 }
 
 /* Principal */
@@ -47,7 +64,7 @@ div#header_card {
 }
 
 div#space_card {
-    padding: 30px;
+    margin: 30px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -63,26 +80,81 @@ div.card {
     margin: 20px;
 }
 
+div.cardbutton {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    height: 30px;
+}
+
+#editcard {
+    color: lime;
+    border-right: solid 2px grey;
+    border-radius: 0px 0px 0px 10px;
+    background-color: green;
+    font-size: 12pt;
+    border: none;
+    display: flex;
+    margin: 0px 0px 0px 0px;
+    width: 88px;
+    padding: 0px;
+    justify-content: center;
+    /* Centraliza o texto horizontalmente */
+    align-items: center;
+    /* Centraliza o texto verticalmente */
+}
+
+
+#deletecard {
+    color: red;
+    border-radius: 0px 0px 10px 0px;
+    background-color: darkred;
+    font-size: 12pt;
+    border: none;
+    display: flex;
+    margin: 0px 0px 0px 0px;
+    width: 88px;
+    justify-content: center;
+    /* Centraliza o texto horizontalmente */
+    align-items: center;
+    /* Centraliza o texto verticalmente */
+}
+
+#deletecard:hover,
+#editcard:hover {
+    cursor: pointer;
+    border-radius: 10px 10px 10px 10px;
+    transform: scale(1.1);
+}
+
+#deletecard:hover {
+    box-shadow: 0px 0px 10px 0px red;
+}
+
+#editcard:hover {
+    box-shadow: 0px 0px 10px 0px lime;
+}
+
 div.card h4 {
-    font-size: 16pt;
     margin-bottom: 6px;
+    font-size: 16pt;
 }
 
 table,
 td {
-    background-color: beige;
     border: 2px solid grey;
+    background-color: beige;
 }
 
 th,
 td {
-    color: rgb(75, 47, 47);
-    width: 32px;
-    height: 36px;
-    font-size: 14pt;
-    text-align: center;
-    font-weight: bold;
     border-radius: 4px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 14pt;
+    height: 36px;
+    width: 32px;
+    color: rgb(75, 47, 47);
 }
 
 .tddefault {
@@ -141,19 +213,19 @@ div.number {
 
 /* Botões */
 
-button {
+.headbutton {
     border: none;
-    padding: 6pt;
+    padding: 12px;
     font-size: 14pt;
     border-radius: 6px;
     background-color: antiquewhite;
 }
 
-button:hover {
+.headbutton:hover {
     background-color: azure;
     border-radius: 6px;
     font-size: 14pt;
-    padding: 6pt;
+    padding: 16px;
     border: none;
     cursor: pointer;
 }
@@ -169,4 +241,272 @@ footer {
     align-items: center;
     justify-content: center;
     background-color: brown;
+}
+
+
+
+/* POP-UP */
+
+.modal {
+    background-color: rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    position: fixed;
+    display: none;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+}
+
+.modal-content {
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    border: solid 2px antiquewhite;
+    padding: 20px;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    max-width: 800px;
+    overflow-y: auto;
+    text-align: center;
+    border-radius: 12px;
+    background-color: #fefefe;
+}
+
+.close {
+    border-radius: 0px 0px 0px 18px;
+    font-weight: bold;
+    font-size: 22pt;
+    position: absolute;
+    border: none;
+    height: 60px;
+    width: 60px;
+    right: 0px;
+    top: 0px;
+}
+
+.close:hover {
+    top: 0px;
+    right: 0px;
+    width: 64px;
+    height: 64px;
+    cursor: pointer;
+    position: absolute;
+    font-size: 18pt;
+    font-weight: bold;
+    border-radius: 0px 0px 0px 10px;
+    background-color: red;
+}
+
+#happycat {
+    margin-left: -40px;
+}
+
+
+
+
+/* celular */
+
+@media (max-width: 768px) {
+
+    /* Cabeçalho */
+    header {
+        height: 8vh;
+        font-size: 12pt;
+    }
+
+    /* Principal */
+
+    main {
+        min-height: 100vh;
+    }
+
+    main section#area_card {
+        width: 75%;
+    }
+
+
+    div#header_card {
+        font-size: 22pt;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: space-evenly;
+    }
+
+    div#space_card {
+        justify-content: space-around;
+        align-items: center;
+        margin: 12px 0px 0px 0px;
+    }
+
+    /* Cartela */
+    div.card {
+        margin: 12px;
+    }
+
+    div.card h4 {
+        font-size: 12pt;
+    }
+
+
+    div .cardbutton {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .cardbutton button {
+        margin: 0px 0px 0px 0px;
+        width: 80.8px;
+        font-size: 12pt;
+    }
+
+
+    #editcard {
+        color: lime;
+        border-right: solid 2px grey;
+        border-radius: 0px 0px 0px 10px;
+        background-color: green;
+        font-size: 12pt;
+        border: none;
+        display: flex;
+        margin: 0px 0px 0px 0px;
+        width: 78px;
+        padding: 0px;
+        justify-content: center;
+        /* Centraliza o texto horizontalmente */
+        align-items: center;
+        /* Centraliza o texto verticalmente */
+    }
+
+
+    #deletecard {
+        color: red;
+        border-radius: 0px 0px 10px 0px;
+        background-color: darkred;
+        font-size: 12pt;
+        border: none;
+        display: flex;
+        margin: 0px 0px 0px 0px;
+        width: 78px;
+        justify-content: center;
+        /* Centraliza o texto horizontalmente */
+        align-items: center;
+        /* Centraliza o texto verticalmente */
+    }
+
+    #deletecard:hover,
+    #editcard:hover {
+        cursor: pointer;
+        border-radius: 10px 10px 10px 10px;
+        transform: scale(1.1);
+    }
+
+    #deletecard:hover {
+        box-shadow: 0px 0px 10px 0px red;
+    }
+
+    #editcard:hover {
+        box-shadow: 0px 0px 10px 0px lime;
+    }
+
+
+    div.card {
+        margin-bottom: 30px;
+    }
+
+    th,
+    td {
+        width: 30px;
+        height: 32px;
+        font-size: 12pt;
+    }
+
+
+
+    /* Jogo */
+
+    main section#area_game {
+        width: 25%;
+    }
+
+    div#header_game {
+        font-size: 16pt;
+        justify-content: space-around;
+    }
+
+    div#space_game {
+        margin: 1px;
+    }
+
+    div.number {
+        border-radius: 10px;
+        font-size: 12pt;
+        margin: 2px;
+        height: 22px;
+        width: 24px;
+    }
+
+    /* Botões */
+
+    .headbutton {
+        padding: 2px;
+        font-size: 12pt;
+    }
+
+    .headbutton:hover {
+        font-size: 12pt;
+        padding: 3px;
+        border: none;
+        cursor: pointer;
+    }
+
+    /* Rodapé */
+
+    footer {
+        width: 100%;
+        bottom: 0;
+        height: 3vh;
+        font-size: 10pt;
+    }
+
+    /* POP-UP */
+
+    .modal {
+        background-color: rgba(0, 0, 0, 0.75);
+    }
+
+    .modal-content {
+        width: 95%;
+        max-width: 240px;
+        max-height: 480px;
+        background-color: #fefefe;
+        overflow-y: auto;
+        text-align: center;
+        border-radius: 12px;
+        font-size: 10pt;
+    }
+
+    .close {
+        font-size: 14pt;
+        height: 24px;
+        width: 24px;
+        border-radius: 0px 0px 0px 10px;
+        background-color: antiquewhite;
+        border: none;
+    }
+
+    .close:hover {
+        font-size: 12pt;
+        height: 26px;
+        width: 26px;
+        border-radius: 0px 0px 0px 6px;
+    }
+
+    #happycat {
+        height: 240px;
+        width: 200px;
+        margin-left: -20px;
+    }
 }
